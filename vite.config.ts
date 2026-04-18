@@ -4,21 +4,34 @@ import path from 'path';
 import { defineConfig, loadEnv } from 'vite';
 
 export default defineConfig(({ mode }) => {
-  const env = loadEnv(mode, '.', '');
+  const env = loadEnv(mode, process.cwd(), ''); // Use process.cwd() for better reliability
+  
   return {
-    base: '/Autocare-pro/',   // 👈 THIS is the missing piece
+    // This matches your GitHub repository name
+    base: '/Autocare-pro/', 
 
     plugins: [react(), tailwindcss()],
+    
     define: {
       'process.env.GEMINI_API_KEY': JSON.stringify(env.GEMINI_API_KEY),
     },
+    
     resolve: {
       alias: {
-        '@': path.resolve(__dirname, '.'),
+        // Standard convention for '@' is to point to the 'src' directory
+        '@': path.resolve(__dirname, './src'),
       },
     },
+
+    build: {
+      // Ensures the output directory is clean for GitHub Pages
+      outDir: 'dist',
+      assetsDir: 'assets',
+    },
+
     server: {
-      hmr: process.env.DISABLE_HMR !== 'true',
+      // Standard HMR setup
+      hmr: true,
     },
   };
 });
