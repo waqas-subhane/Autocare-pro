@@ -8,7 +8,7 @@ export default defineConfig(({ mode }) => {
   
   return {
     // This matches your GitHub repository name
-    base: '/Autocare-pro/', 
+    base: mode === 'production' ? '/Autocare-pro/' : '/',
 
     plugins: [react(), tailwindcss()],
     
@@ -18,15 +18,15 @@ export default defineConfig(({ mode }) => {
     
     resolve: {
       alias: {
-        // Standard convention for '@' is to point to the 'src' directory
-        '@': path.resolve(__dirname, './src'),
+        // Keep Vite aligned with tsconfig path alias ("@/*": ["./*"])
+        '@': path.resolve(__dirname, './'),
       },
     },
 
     build: {
-      // Ensures the output directory is clean for GitHub Pages
       outDir: 'dist',
       assetsDir: 'assets',
+      emptyOutDir: true,
     },
 
     server: {
